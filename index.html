@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konacore - Market & Video & Müzik</title>
+    <title>Konacore - Market & Müzik</title>
     <style>
         body {
             margin: 0;
@@ -47,7 +47,6 @@
             backdrop-filter: blur(10px);
             transition: 0.3s;
             width: 300px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .kk-button:hover {
@@ -80,15 +79,6 @@
             text-align: center;
         }
 
-        .item {
-            background: rgba(255, 255, 255, 0.03);
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-
         video {
             width: 100%;
             border-radius: 12px;
@@ -105,30 +95,12 @@
             cursor: pointer;
             font-weight: bold;
         }
-
-        /* Müzik Kontrol Butonu (Sağ Alt) */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
     </style>
 </head>
-<body onclick="startAmbiance()">
+<body onclick="startMusic()">
 
     <audio id="bgMusic" loop>
         <source src="rayxveashabparmakseksi.mp3" type="audio/mpeg">
-    </audio>
-    
-    <audio id="waterAmbience" loop>
-        <source src="https://www.soundjay.com/nature/sounds/river-1.mp3" type="audio/mpeg">
     </audio>
 
     <button class="kk-button" onclick="toggle('market')">MARKET</button>
@@ -137,8 +109,12 @@
     <div class="overlay" id="marketOverlay">
         <div class="content-box">
             <h2>MARKET</h2>
-            <div class="item"><span>VIP</span><span style="color:#50ff7e">25 TL</span></div>
-            <div class="item"><span>P.VIP</span><span style="color:#50ff7e">35 TL</span></div>
+            <div style="margin: 10px 0; display: flex; justify-content: space-between;">
+                <span>VIP</span><span style="color:#50ff7e">25 TL</span>
+            </div>
+            <div style="margin: 10px 0; display: flex; justify-content: space-between;">
+                <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
+            </div>
             <button class="close-btn" onclick="toggle('market')">KAPAT</button>
         </div>
     </div>
@@ -154,19 +130,13 @@
     </div>
 
     <script>
-        let ambianceStarted = false;
+        let musicStarted = false;
 
-        function startAmbiance() {
-            if (!ambianceStarted) {
+        function startMusic() {
+            if (!musicStarted) {
                 const music = document.getElementById('bgMusic');
-                const water = document.getElementById('waterAmbience');
-                
-                music.volume = 0.4; // Şarkı sesi
-                water.volume = 0.2; // Arka plan su sesi daha kısık
-                
                 music.play();
-                water.play();
-                ambianceStarted = true;
+                musicStarted = true;
             }
         }
 
@@ -179,18 +149,19 @@
                 overlay.style.display = 'none';
                 if(type === 'video') {
                     video.pause();
-                    music.play(); // Video kapanınca müzik devam etsin
+                    music.play(); // Video kapanınca şarkı devam eder
                 }
             } else {
                 overlay.style.display = 'flex';
                 if(type === 'video') {
-                    music.pause(); // Video açılınca müzik sussun
+                    music.pause(); // Video açılınca şarkı durur
                     video.play();
                 }
             }
         }
 
-        function createSnow() {
+        // Kar Yağışı Efekti
+        setInterval(() => {
             const s = document.createElement('div');
             s.className = 'snow';
             s.style.left = Math.random() * 100 + 'vw';
@@ -199,8 +170,7 @@
             s.style.animationDuration = Math.random() * 3 + 4 + 's';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 7000);
-        }
-        setInterval(createSnow, 100);
+        }, 100);
     </script>
 </body>
 </html>
