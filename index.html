@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konacore - Market & Müzik</title>
+    <title>Konacore - Otomatik Gece Modu</title>
     <style>
         body {
             margin: 0;
@@ -20,6 +20,7 @@
             gap: 20px;
         }
 
+        /* Kar Yağışı */
         .snow {
             position: fixed;
             top: -10px;
@@ -32,6 +33,7 @@
 
         @keyframes fall { to { transform: translateY(105vh); } }
 
+        /* Buton Tasarımı */
         .kk-button {
             z-index: 10;
             padding: 18px 45px;
@@ -55,6 +57,7 @@
             border-color: #00d4ff;
         }
 
+        /* Modal / Panel */
         .overlay {
             position: fixed;
             top: 0;
@@ -79,11 +82,7 @@
             text-align: center;
         }
 
-        video {
-            width: 100%;
-            border-radius: 12px;
-            background: black;
-        }
+        video { width: 100%; border-radius: 12px; }
 
         .close-btn {
             margin-top: 20px;
@@ -97,10 +96,13 @@
         }
     </style>
 </head>
-<body onclick="startMusic()">
+<body onclick="unmuteAll()">
 
     <audio id="bgMusic" loop>
         <source src="rayxveashabparmakseksi.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="waterSound" loop>
+        <source src="https://www.soundjay.com/nature/sounds/river-1.mp3" type="audio/mpeg">
     </audio>
 
     <button class="kk-button" onclick="toggle('market')">MARKET</button>
@@ -109,10 +111,10 @@
     <div class="overlay" id="marketOverlay">
         <div class="content-box">
             <h2>MARKET</h2>
-            <div style="margin: 10px 0; display: flex; justify-content: space-between;">
+            <div style="display:flex; justify-content:space-between; margin:10px 0;">
                 <span>VIP</span><span style="color:#50ff7e">25 TL</span>
             </div>
-            <div style="margin: 10px 0; display: flex; justify-content: space-between;">
+            <div style="display:flex; justify-content:space-between; margin:10px 0;">
                 <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
             </div>
             <button class="close-btn" onclick="toggle('market')">KAPAT</button>
@@ -130,37 +132,49 @@
     </div>
 
     <script>
-        let musicStarted = false;
+        const music = document.getElementById('bgMusic');
+        const water = document.getElementById('waterSound');
+        let unmuted = false;
 
-        function startMusic() {
-            if (!musicStarted) {
-                const music = document.getElementById('bgMusic');
+        // Sayfa yüklendiği an teknik olarak çalmaya başlar (ama tarayıcı sesini kısabilir)
+        window.addEventListener('DOMContentLoaded', () => {
+            music.play().catch(() => {
+                console.log("Tarayıcı otomatik sesi engelledi, etkileşim bekleniyor.");
+            });
+            water.play().catch(() => {});
+        });
+
+        // Kullanıcı herhangi bir yere tıkladığı an sesleri açar
+        function unmuteAll() {
+            if (!unmuted) {
+                music.muted = false;
+                water.muted = false;
                 music.play();
-                musicStarted = true;
+                water.play();
+                unmuted = true;
             }
         }
 
         function toggle(type) {
             const overlay = document.getElementById(type + 'Overlay');
             const video = document.getElementById('myVideo');
-            const music = document.getElementById('bgMusic');
 
             if (overlay.style.display === 'flex') {
                 overlay.style.display = 'none';
                 if(type === 'video') {
                     video.pause();
-                    music.play(); // Video kapanınca şarkı devam eder
+                    music.play();
                 }
             } else {
                 overlay.style.display = 'flex';
                 if(type === 'video') {
-                    music.pause(); // Video açılınca şarkı durur
+                    music.pause();
                     video.play();
                 }
             }
         }
 
-        // Kar Yağışı Efekti
+        // Kar taneleri oluşturma
         setInterval(() => {
             const s = document.createElement('div');
             s.className = 'snow';
@@ -170,7 +184,7 @@
             s.style.animationDuration = Math.random() * 3 + 4 + 's';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 7000);
-        }, 100);
+        }, 120);
     </script>
 </body>
 </html>
