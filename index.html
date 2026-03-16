@@ -3,178 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konacore - Otomatik Gece Modu</title>
+    <title>Konacore</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
+        body { margin: 0; background: #020205; overflow: hidden; font-family: 'Poppins', sans-serif; color: white; }
+        
+        /* GİRİŞ EKRANI (Müziği başlatmak için mecburi) */
+        #entry-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 9999; display: flex;
+            justify-content: center; align-items: center; cursor: pointer;
+        }
+        #entry-overlay h1 { font-size: 1.5rem; letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+        /* ANA SİTE İÇERİĞİ */
+        .main-container {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 20px;
             background: radial-gradient(circle at center, #0a0a12 0%, #020205 100%);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            color: white;
-            gap: 20px;
         }
 
-        /* Kar Yağışı */
-        .snow {
-            position: fixed;
-            top: -10px;
-            background: white;
-            border-radius: 50%;
-            z-index: 1;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
-
+        .snow { position: fixed; top: -10px; background: white; border-radius: 50%; z-index: 1; pointer-events: none; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(105vh); } }
 
-        /* Buton Tasarımı */
         .kk-button {
-            z-index: 10;
-            padding: 18px 45px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            width: 300px;
+            z-index: 10; padding: 18px 45px; font-size: 1.3rem; font-weight: bold;
+            text-transform: uppercase; color: white; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; cursor: pointer; backdrop-filter: blur(10px); width: 300px;
         }
 
-        .kk-button:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(1.05);
-            border-color: #00d4ff;
-        }
-
-        /* Modal / Panel */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            z-index: 100;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .content-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 90%;
-            max-width: 450px;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-        }
-
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.92); z-index: 100; display: none; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
+        .content-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); width: 90%; max-width: 450px; border-radius: 20px; padding: 30px; text-align: center; }
         video { width: 100%; border-radius: 12px; }
-
-        .close-btn {
-            margin-top: 20px;
-            background: #ff4757;
-            border: none;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        .close-btn { margin-top: 20px; background: #ff4757; border: none; color: white; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
-<body onclick="unmuteAll()">
+<body>
 
-    <audio id="bgMusic" loop>
-        <source src="rayxveashabparmakseksi.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="waterSound" loop>
-        <source src="https://www.soundjay.com/nature/sounds/river-1.mp3" type="audio/mpeg">
-    </audio>
-
-    <button class="kk-button" onclick="toggle('market')">MARKET</button>
-    <button class="kk-button" onclick="toggle('video')">VİDEO İZLE</button>
-
-    <div class="overlay" id="marketOverlay">
-        <div class="content-box">
-            <h2>MARKET</h2>
-            <div style="display:flex; justify-content:space-between; margin:10px 0;">
-                <span>VIP</span><span style="color:#50ff7e">25 TL</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin:10px 0;">
-                <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
-            </div>
-            <button class="close-btn" onclick="toggle('market')">KAPAT</button>
-        </div>
+    <div id="entry-overlay" onclick="enterSite()">
+        <h1>GİRMEK İÇİN TIKLA</h1>
     </div>
 
-    <div class="overlay" id="videoOverlay">
-        <div class="content-box">
-            <h2>VİDEO</h2>
-            <video id="myVideo" controls>
-                <source src="videoplayback.mp4" type="video/mp4">
-            </video>
-            <button class="close-btn" onclick="toggle('video')">KAPAT</button>
+    <div class="main-container">
+        <audio id="bgMusic" loop>
+            <source src="rayxveashabparmakseksi.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="waterSound" loop>
+            <source src="https://www.soundjay.com/nature/sounds/river-1.mp3" type="audio/mpeg">
+        </audio>
+
+        <button class="kk-button" onclick="toggle('market')">MARKET</button>
+        <button class="kk-button" onclick="toggle('video')">VİDEO İZLE</button>
+
+        <div class="overlay" id="marketOverlay">
+            <div class="content-box">
+                <h2>MARKET</h2>
+                <div style="display:flex; justify-content:space-between; margin:10px 0;">
+                    <span>VIP</span><span style="color:#50ff7e">25 TL</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin:10px 0;">
+                    <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
+                </div>
+                <button class="close-btn" onclick="toggle('market')">KAPAT</button>
+            </div>
+        </div>
+
+        <div class="overlay" id="videoOverlay">
+            <div class="content-box">
+                <h2>VİDEO</h2>
+                <video id="myVideo" controls>
+                    <source src="videoplayback.mp4" type="video/mp4">
+                </video>
+                <button class="close-btn" onclick="toggle('video')">KAPAT</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const music = document.getElementById('bgMusic');
-        const water = document.getElementById('waterSound');
-        let unmuted = false;
-
-        // Sayfa yüklendiği an teknik olarak çalmaya başlar (ama tarayıcı sesini kısabilir)
-        window.addEventListener('DOMContentLoaded', () => {
-            music.play().catch(() => {
-                console.log("Tarayıcı otomatik sesi engelledi, etkileşim bekleniyor.");
-            });
-            water.play().catch(() => {});
-        });
-
-        // Kullanıcı herhangi bir yere tıkladığı an sesleri açar
-        function unmuteAll() {
-            if (!unmuted) {
-                music.muted = false;
-                water.muted = false;
-                music.play();
-                water.play();
-                unmuted = true;
-            }
+        function enterSite() {
+            // Giriş ekranını kaldır
+            document.getElementById('entry-overlay').style.display = 'none';
+            
+            // Sesleri başlat
+            const music = document.getElementById('bgMusic');
+            const water = document.getElementById('waterSound');
+            music.volume = 0.5;
+            water.volume = 0.2;
+            music.play();
+            water.play();
         }
 
         function toggle(type) {
             const overlay = document.getElementById(type + 'Overlay');
             const video = document.getElementById('myVideo');
+            const music = document.getElementById('bgMusic');
 
             if (overlay.style.display === 'flex') {
                 overlay.style.display = 'none';
-                if(type === 'video') {
-                    video.pause();
-                    music.play();
-                }
+                if(type === 'video') { video.pause(); music.play(); }
             } else {
                 overlay.style.display = 'flex';
-                if(type === 'video') {
-                    music.pause();
-                    video.play();
-                }
+                if(type === 'video') { music.pause(); video.play(); }
             }
         }
 
-        // Kar taneleri oluşturma
         setInterval(() => {
             const s = document.createElement('div');
             s.className = 'snow';
@@ -184,7 +116,7 @@
             s.style.animationDuration = Math.random() * 3 + 4 + 's';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 7000);
-        }, 120);
+        }, 100);
     </script>
 </body>
 </html>
