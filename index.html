@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karanlık Karlı Gece</title>
+    <style>
+        /* Genel Arkaplan Ayarları */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #050505, #11111b);
+            height: 100-vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: white;
+        }
 
+        /* Kar Tanesi Tasarımı */
+        .snow {
+            position: fixed;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            filter: blur(1px);
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh);
+            }
+        }
+
+        /* İçerik Kutusu (Cam Efekti) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 2px; }
+        p { opacity: 0.8; line-height: 1.6; }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover { transform: scale(1.05); background: #ddd; }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <h1>GECE MODU AKTİF</h1>
+        <p>Karanlık atmosfer, minimalist tasarım ve yumuşak kar yağışı. <br> Her şey istediğin gibi hazır.</p>
+        <a href="#" class="btn">DAHA FAZLA</a>
+    </div>
+
+    <script>
+        // Kar Taneleri Oluşturma Scripti
+        function createSnowflake() {
+            const snow = document.createElement('div');
+            snow.classList.add('snow');
+            
+            // Rastgele genişlik ve başlangıç noktası
+            const size = Math.random() * 5 + 2 + 'px';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.width = size;
+            snow.style.height = size;
+            snow.style.opacity = Math.random();
+            
+            // Düşüş hızı
+            snow.style.animationDuration = Math.random() * 3 + 2 + 's';
+            
+            document.body.appendChild(snow);
+
+            // Ekran dışına çıkınca sil
+            setTimeout(() => {
+                snow.remove();
+            }, 5000);
+        }
+
+        // Her 100ms'de bir kar tanesi üret
+        setInterval(createSnowflake, 100);
+    </script>
+</body>
+</html>
