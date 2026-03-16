@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konacore Gece Modu</title>
+    <title>Uras ve Mete - KK Profile</title>
     <style>
         /* Genel Arkaplan Ayarları */
         body {
@@ -60,20 +60,128 @@
         .kk-button:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.5);
-            transform: scale(1.1) translateY(-5px);
+            transform: scale(1.05) translateY(-3px);
             box-shadow: 0 15px 45px rgba(255, 255, 255, 0.1);
         }
 
         .kk-button:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
+
+        /* Tıklanınca Açılan Kare Alan (Modal Overlay) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s, visibility 0.4s;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Kare Alan Aktif Olduğunda */
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Kare Alanın Kendisi (İçerik) */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 400px; /* Tam bir kare gibi görünmesi için ideal genişlik */
+            aspect-ratio: 1 / 1; /* Kare oranını korur */
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Kapatma Butonu (X) */
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Modal İçindeki Metin */
+        .modal-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
     </style>
 </head>
 <body>
 
-    <a href="#" class="kk-button">PROFILE</a>
+    <button class="kk-button" id="openModalBtn">PROFILE</button>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            <p class="modal-text">Uras ve Mete iyi arkadaşlar dostlar şimdiye kadar kimse onları ayıramadı</p>
+        </div>
+    </div>
 
     <script>
+        // --- Modal Kontrolü ---
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Paneli Aç
+        openModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+        });
+
+        // Paneli Kapat (X butonu ile)
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        // Paneli Kapat (Dışarıya tıklayınca)
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+
+        // --- Kar Yağışı Efekti (Öncekiyle aynı) ---
         function createSnowflake() {
             const snow = document.createElement('div');
             snow.classList.add('snow');
@@ -81,7 +189,6 @@
             const size = Math.random() * 4 + 1 + 'px';
             const startX = Math.random() * 100 + 'vw';
             const duration = Math.random() * 3 + 4 + 's';
-            const delay = Math.random() * 2 + 's';
 
             snow.style.left = startX;
             snow.style.width = size;
@@ -96,7 +203,6 @@
             }, 7000);
         }
 
-        // Kar yoğunluğunu buradan ayarlayabilirsin (150ms idealdir)
         setInterval(createSnowflake, 150);
     </script>
 </body>
