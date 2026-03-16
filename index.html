@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konacore Market</title>
+    <title>Konacore - Market & Video</title>
     <style>
         /* Arkaplan ve Kar Atmosferi */
         body {
@@ -12,11 +12,13 @@
             background: radial-gradient(circle at center, #0f0f1a 0%, #050505 100%);
             height: 100vh;
             display: flex;
+            flex-direction: column; /* Butonları alt alta veya yan yana dizmek için */
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
             color: white;
+            gap: 20px; /* Butonlar arası boşluk */
         }
 
         .snow {
@@ -31,7 +33,7 @@
 
         @keyframes fall { to { transform: translateY(105vh); } }
 
-        /* Ana Buton */
+        /* Ortak Buton Tasarımı */
         .kk-button {
             z-index: 10;
             padding: 18px 45px;
@@ -46,124 +48,113 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
             transition: 0.3s;
+            width: 280px; /* Butonların genişliği eşit olsun */
         }
 
         .kk-button:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: scale(1.05);
+            border-color: #00d4ff;
         }
 
-        /* Market Paneli (Modal) */
-        .market-overlay {
+        /* Overlay (Panel) Ayarları */
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 100;
-            display: flex;
+            display: none; /* JavaScript ile açılacak */
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.4s;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
 
-        .market-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .market-content {
+        .content-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 350px;
+            width: 90%;
+            max-width: 500px;
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
-            transform: translateY(20px);
-            transition: 0.4s;
-        }
-
-        .market-overlay.active .market-content {
-            transform: translateY(0);
-        }
-
-        h2 { 
-            margin-top: 0; 
-            letter-spacing: 3px; 
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 15px;
+            position: relative;
         }
 
         /* Market Ürünleri */
         .item {
             background: rgba(255, 255, 255, 0.03);
-            margin: 15px 0;
+            margin: 10px 0;
             padding: 15px;
             border-radius: 12px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             border: 1px solid transparent;
-            transition: 0.3s;
         }
+        .item-name { color: #00d4ff; font-weight: bold; }
+        .item-price { color: #50ff7e; }
 
-        .item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
+        /* Video Ayarları */
+        video {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
-
-        .item-name { font-weight: bold; font-size: 1.1rem; color: #00d4ff; }
-        .item-price { color: #50ff7e; font-weight: bold; }
 
         .close-btn {
-            margin-top: 20px;
+            margin-top: 15px;
             background: none;
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
             padding: 8px 20px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.9rem;
         }
-
-        .close-btn:hover { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <button class="kk-button" id="openBtn">MARKET</button>
+    <button class="kk-button" onclick="toggle('market')">MARKET</button>
+    <button class="kk-button" onclick="toggle('video')">VİDEO İZLE</button>
 
-    <div class="market-overlay" id="marketOverlay">
-        <div class="market-content">
+    <div class="overlay" id="marketOverlay">
+        <div class="content-box">
             <h2>MARKET</h2>
-            
-            <div class="item">
-                <span class="item-name">VIP</span>
-                <span class="item-price">25 TL</span>
-            </div>
+            <div class="item"><span class="item-name">VIP</span><span class="item-price">25 TL</span></div>
+            <div class="item"><span class="item-name">P.VIP</span><span class="item-price">35 TL</span></div>
+            <button class="close-btn" onclick="toggle('market')">Kapat</button>
+        </div>
+    </div>
 
-            <div class="item">
-                <span class="item-name">P.VIP</span>
-                <span class="item-price">35 TL</span>
-            </div>
-
-            <button class="close-btn" id="closeBtn">Kapat</button>
+    <div class="overlay" id="videoOverlay">
+        <div class="content-box">
+            <h2>ÖZBEK ÇALIŞANLAR</h2>
+            <video id="myVideo" controls>
+                <source src="videoplayback.mp4" type="video/mp4">
+                Tarayıcın video oynatmayı desteklemiyor.
+            </video>
+            <br>
+            <button class="close-btn" onclick="toggle('video')">Kapat</button>
         </div>
     </div>
 
     <script>
-        const openBtn = document.getElementById('openBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const overlay = document.getElementById('marketOverlay');
+        // Aç/Kapat Fonksiyonu
+        function toggle(type) {
+            const overlay = document.getElementById(type + 'Overlay');
+            const video = document.getElementById('myVideo');
+            
+            if (overlay.style.display === 'flex') {
+                overlay.style.display = 'none';
+                if(type === 'video') video.pause(); // Kapatınca videoyu durdur
+            } else {
+                overlay.style.display = 'flex';
+            }
+        }
 
-        openBtn.onclick = () => overlay.classList.add('active');
-        closeBtn.onclick = () => overlay.classList.remove('active');
-        window.onclick = (e) => { if(e.target == overlay) overlay.classList.remove('active'); }
-
+        // Kar Yağışı
         function createSnow() {
             const s = document.createElement('div');
             s.className = 'snow';
