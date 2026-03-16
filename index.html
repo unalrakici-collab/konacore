@@ -3,207 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uras ve Mete - KK Profile</title>
+    <title>Konacore Market</title>
     <style>
-        /* Genel Arkaplan Ayarları */
+        /* Arkaplan ve Kar Atmosferi */
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at center, #11111b 0%, #050505 100%);
+            background: radial-gradient(circle at center, #0f0f1a 0%, #050505 100%);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
             color: white;
         }
 
-        /* Kar Tanesi Tasarımı */
         .snow {
             position: fixed;
             top: -10px;
             background: white;
             border-radius: 50%;
-            filter: blur(1px);
             z-index: 1;
             pointer-events: none;
             animation: fall linear forwards;
         }
 
-        @keyframes fall {
-            to {
-                transform: translateY(105vh);
-            }
-        }
+        @keyframes fall { to { transform: translateY(105vh); } }
 
-        /* KK Profile Buton Tasarımı */
+        /* Ana Buton */
         .kk-button {
-            position: relative;
             z-index: 10;
-            padding: 20px 50px;
-            font-size: 1.5rem;
-            font-weight: 800;
+            padding: 18px 45px;
+            font-size: 1.3rem;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: white;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            backdrop-filter: blur(15px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
         }
 
         .kk-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 15px 45px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
         }
 
-        .kk-button:active {
-            transform: scale(0.98);
-        }
-
-        /* Tıklanınca Açılan Kare Alan (Modal Overlay) */
-        .modal-overlay {
+        /* Market Paneli (Modal) */
+        .market-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 100;
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s, visibility 0.4s;
-            backdrop-filter: blur(5px);
+            transition: 0.4s;
+            backdrop-filter: blur(8px);
         }
 
-        /* Kare Alan Aktif Olduğunda */
-        .modal-overlay.active {
+        .market-overlay.active {
             opacity: 1;
             visibility: visible;
         }
 
-        /* Kare Alanın Kendisi (İçerik) */
-        .modal-content {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
+        .market-content {
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 90%;
-            max-width: 400px; /* Tam bir kare gibi görünmesi için ideal genişlik */
-            aspect-ratio: 1 / 1; /* Kare oranını korur */
+            width: 350px;
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 30px;
             text-align: center;
-            transform: scale(0.8);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(20px);
+            transition: 0.4s;
         }
 
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
+        .market-overlay.active .market-content {
+            transform: translateY(0);
         }
 
-        /* Kapatma Butonu (X) */
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.8rem;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: color 0.3s;
+        h2 { 
+            margin-top: 0; 
+            letter-spacing: 3px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        /* Market Ürünleri */
+        .item {
+            background: rgba(255, 255, 255, 0.03);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .item-name { font-weight: bold; font-size: 1.1rem; color: #00d4ff; }
+        .item-price { color: #50ff7e; font-weight: bold; }
+
+        .close-btn {
+            margin-top: 20px;
             background: none;
-            border: none;
-            padding: 0;
-        }
-
-        .close-modal:hover {
+            border: 1px solid rgba(255,255,255,0.3);
             color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
-        /* Modal İçindeki Metin */
-        .modal-text {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            margin: 0;
-        }
-
+        .close-btn:hover { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <button class="kk-button" id="openModalBtn">PROFILE</button>
+    <button class="kk-button" id="openBtn">PROFILE</button>
 
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModalBtn">&times;</button>
-            <p class="modal-text">Uras ve Mete iyi arkadaşlar dostlar şimdiye kadar kimse onları ayıramadı</p>
+    <div class="market-overlay" id="marketOverlay">
+        <div class="market-content">
+            <h2>MARKET</h2>
+            
+            <div class="item">
+                <span class="item-name">VIP</span>
+                <span class="item-price">25 TL</span>
+            </div>
+
+            <div class="item">
+                <span class="item-name">P.VIP</span>
+                <span class="item-price">35 TL</span>
+            </div>
+
+            <button class="close-btn" id="closeBtn">Kapat</button>
         </div>
     </div>
 
     <script>
-        // --- Modal Kontrolü ---
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
+        const openBtn = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('marketOverlay');
 
-        // Paneli Aç
-        openModalBtn.addEventListener('click', () => {
-            modalOverlay.classList.add('active');
-        });
+        openBtn.onclick = () => overlay.classList.add('active');
+        closeBtn.onclick = () => overlay.classList.remove('active');
+        window.onclick = (e) => { if(e.target == overlay) overlay.classList.remove('active'); }
 
-        // Paneli Kapat (X butonu ile)
-        closeModalBtn.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-
-        // Paneli Kapat (Dışarıya tıklayınca)
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
-            }
-        });
-
-
-        // --- Kar Yağışı Efekti (Öncekiyle aynı) ---
-        function createSnowflake() {
-            const snow = document.createElement('div');
-            snow.classList.add('snow');
-            
-            const size = Math.random() * 4 + 1 + 'px';
-            const startX = Math.random() * 100 + 'vw';
-            const duration = Math.random() * 3 + 4 + 's';
-
-            snow.style.left = startX;
-            snow.style.width = size;
-            snow.style.height = size;
-            snow.style.opacity = Math.random() * 0.7 + 0.3;
-            snow.style.animationDuration = duration;
-            
-            document.body.appendChild(snow);
-
-            setTimeout(() => {
-                snow.remove();
-            }, 7000);
+        function createSnow() {
+            const s = document.createElement('div');
+            s.className = 'snow';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.width = s.style.height = Math.random() * 4 + 2 + 'px';
+            s.style.opacity = Math.random();
+            s.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 7000);
         }
-
-        setInterval(createSnowflake, 150);
+        setInterval(createSnow, 100);
     </script>
 </body>
 </html>
