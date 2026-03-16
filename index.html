@@ -7,7 +7,7 @@
     <style>
         body { margin: 0; background: #020205; overflow: hidden; font-family: 'Poppins', sans-serif; color: white; }
         
-        /* GİRİŞ EKRANI (Müziği başlatmak için mecburi) */
+        /* GİRİŞ EKRANI */
         #entry-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: black; z-index: 9999; display: flex;
@@ -30,7 +30,9 @@
             z-index: 10; padding: 18px 45px; font-size: 1.3rem; font-weight: bold;
             text-transform: uppercase; color: white; background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; cursor: pointer; backdrop-filter: blur(10px); width: 300px;
+            transition: 0.3s;
         }
+        .kk-button:hover { background: rgba(255, 255, 255, 0.1); border-color: #00d4ff; transform: scale(1.05); }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.92); z-index: 100; display: none; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
         .content-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); width: 90%; max-width: 450px; border-radius: 20px; padding: 30px; text-align: center; }
@@ -52,21 +54,7 @@
             <source src="https://www.soundjay.com/nature/sounds/river-1.mp3" type="audio/mpeg">
         </audio>
 
-        <button class="kk-button" onclick="toggle('market')">MARKET</button>
-        <button class="kk-button" onclick="toggle('video')">VİDEO İZLE</button>
-
-        <div class="overlay" id="marketOverlay">
-            <div class="content-box">
-                <h2>MARKET</h2>
-                <div style="display:flex; justify-content:space-between; margin:10px 0;">
-                    <span>VIP</span><span style="color:#50ff7e">25 TL</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin:10px 0;">
-                    <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
-                </div>
-                <button class="close-btn" onclick="toggle('market')">KAPAT</button>
-            </div>
-        </div>
+        <button class="kk-button" onclick="toggleVideo(true)">VİDEO İZLE</button>
 
         <div class="overlay" id="videoOverlay">
             <div class="content-box">
@@ -74,17 +62,15 @@
                 <video id="myVideo" controls>
                     <source src="videoplayback.mp4" type="video/mp4">
                 </video>
-                <button class="close-btn" onclick="toggle('video')">KAPAT</button>
+                <br>
+                <button class="close-btn" onclick="toggleVideo(false)">KAPAT</button>
             </div>
         </div>
     </div>
 
     <script>
         function enterSite() {
-            // Giriş ekranını kaldır
             document.getElementById('entry-overlay').style.display = 'none';
-            
-            // Sesleri başlat
             const music = document.getElementById('bgMusic');
             const water = document.getElementById('waterSound');
             music.volume = 0.5;
@@ -93,20 +79,23 @@
             water.play();
         }
 
-        function toggle(type) {
-            const overlay = document.getElementById(type + 'Overlay');
+        function toggleVideo(show) {
+            const overlay = document.getElementById('videoOverlay');
             const video = document.getElementById('myVideo');
             const music = document.getElementById('bgMusic');
 
-            if (overlay.style.display === 'flex') {
-                overlay.style.display = 'none';
-                if(type === 'video') { video.pause(); music.play(); }
-            } else {
+            if (show) {
                 overlay.style.display = 'flex';
-                if(type === 'video') { music.pause(); video.play(); }
+                music.pause();
+                video.play();
+            } else {
+                overlay.style.display = 'none';
+                video.pause();
+                music.play();
             }
         }
 
+        // Kar Yağışı
         setInterval(() => {
             const s = document.createElement('div');
             s.className = 'snow';
