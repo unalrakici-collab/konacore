@@ -3,162 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yazılım Geliştirici | Portfolyo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Tanıtım Sayfası | Kar Efekti</title>
     <style>
-        :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --accent-color: #ff3333;
-            --text-main: #ffffff;
-            --text-dim: #b3b3b3;
-        }
-
+        /* Genel Stil */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            height: 60vh;
+            padding: 0;
+            background-color: #000; /* Siyah Arka Plan */
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Kar tanelerinin taşmasını önler */
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            background: linear-gradient(rgba(15, 15, 15, 0.8), rgba(15, 15, 15, 0.8)), 
-                        url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            border-bottom: 3px solid var(--accent-color);
+            height: 100vh;
         }
 
+        /* İçerik Alanı */
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        h1 { font-size: 3rem; margin-bottom: 10px; }
-        .tagline { color: var(--accent-color); font-weight: bold; letter-spacing: 2px; }
-
-        .section-title {
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        /* Yetenekler ve Projeler Kartları */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            transition: transform 0.3s;
-            border: 1px solid #333;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-color);
-        }
-
-        .skill-badge {
-            display: inline-block;
-            background: #333;
-            padding: 5px 12px;
+            text-align: center;
+            z-index: 10; /* Karın üstünde kalması için */
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
             border-radius: 20px;
-            margin: 5px;
-            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
         }
 
-        /* İletişim Butonları */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
         .btn {
             display: inline-block;
-            background: var(--accent-color);
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 5px;
             margin-top: 20px;
+            padding: 12px 30px;
+            color: black;
+            background-color: white;
+            text-decoration: none;
+            border-radius: 50px;
             font-weight: bold;
+            transition: 0.3s;
         }
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-dim);
-            font-size: 0.9rem;
+        .btn:hover {
+            transform: scale(1.1);
+            background-color: #ddd;
+        }
+
+        /* Kar Taneleri Stili */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            user-select: none;
+            z-index: 1;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh);
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>YAZILIM GELİŞTİRİCİ</h1>
-        <div class="tagline">PYTHON & BACKEND SİSTEMLERİ</div>
-        <a href="#contact" class="btn">Benimle Çalışın</a>
-    </header>
-
     <div class="container">
-        
-        <section>
-            <h2 class="section-title">Uzmanlık Alanları</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Backend Geliştirme</h3>
-                    <p>Python ile yüksek performanslı, güvenli ve ölçeklenebilir sistem mimarileri kuruyorum.</p>
-                    <div class="skill-badge">Python</div>
-                    <div class="skill-badge">Django/Flask</div>
-                    <div class="skill-badge">PostgreSQL</div>
-                </div>
-                <div class="card">
-                    <h3>Sistem Yönetimi</h3>
-                    <p>Sunucu yapılandırmaları, plugin entegrasyonları ve veritabanı optimizasyonu konularında deneyimliyim.</p>
-                    <div class="skill-badge">API Tasarımı</div>
-                    <div class="skill-badge">Linux</div>
-                    <div class="skill-badge">Git</div>
-                </div>
-            </div>
-        </section>
-
-        <section style="margin-top: 60px;">
-            <h2 class="section-title">Öne Çıkan Projeler</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Otomasyon Botları</h3>
-                    <p>İş süreçlerini hızlandıran gelişmiş Python scriptleri ve veri kazıma araçları.</p>
-                </div>
-                <div class="card">
-                    <h3>Web Uygulamaları</h3>
-                    <p>Modern frontend kütüphaneleri ve sağlam backend servislerinin birleşimi olan projeler.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" style="margin-top: 60px; text-align: center;">
-            <h2 class="section-title">İletişime Geçin</h2>
-            <p>Yeni projeler ve iş teklifleri için bana her zaman ulaşabilirsiniz.</p>
-            <div style="font-size: 2rem; margin-top: 20px;">
-                <a href="#" style="color: white; margin: 0 15px;"><i class="fab fa-github"></i></a>
-                <a href="#" style="color: white; margin: 0 15px;"><i class="fab fa-linkedin"></i></a>
-                <a href="mailto:email@adresin.com" style="color: var(--accent-color); margin: 0 15px;"><i class="fas fa-envelope"></i></a>
-            </div>
-        </section>
-
+        <h1>MARKA ADINIZ</h1>
+        <p>Geleceğin teknolojisiyle tanışın. Şıklık ve sadelik bir arada.</p>
+        <a href="#" class="btn">Daha Fazla Bilgi</a>
     </div>
 
-    <footer>
-        &copy; 2026 Tüm Hakları Saklıdır.
-    </footer>
+    <script>
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.innerHTML = '❄'; // Kar karakteri
+            snowflake.classList.add('snowflake');
+            
+            // Rastgele özellikler
+            const size = Math.random() * 15 + 10 + 'px';
+            const left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 2 + 's'; // 2-5 saniye arası düşüş
+            const opacity = Math.random();
+
+            snowflake.style.fontSize = size;
+            snowflake.style.left = left;
+            snowflake.style.animationDuration = duration;
+            snowflake.style.opacity = opacity;
+
+            document.body.appendChild(snowflake);
+
+            // Ekran dışına çıkınca temizle
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Kar yağışını başlat
+        setInterval(createSnowflake, 100);
+    </script>
 
 </body>
 </html>
