@@ -22,7 +22,7 @@
         /* İçerik Alanı */
         .container {
             text-align: center;
-            z-index: 10; /* Karın üstünde kalması için */
+            z-index: 10; /* Yıldızın üstünde kalması için */
             background: rgba(0, 0, 0, 0.6);
             padding: 40px;
             border-radius: 20px;
@@ -58,7 +58,7 @@
             background-color: #ddd;
         }
 
-        /* Kar Taneleri Stili */
+        /* Yıldız Taneleri Stili */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -86,9 +86,9 @@
 
     <script>
         function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.innerHTML = '❄'; // Kar karakteri
-            snowflake.classList.add('snowflake');
+            const starflake = document.createElement('div');
+            starflake.innerHTML = '❄'; // Yıldız karakteri
+            starflake.classList.add('starflake');
             
             // Rastgele özellikler
             const size = Math.random() * 15 + 10 + 'px';
@@ -105,7 +105,7 @@
 
             // Ekran dışına çıkınca temizle
             setTimeout(() => {
-                snowflake.remove();
+                starflake.remove();
             }, 5000);
         }
 
